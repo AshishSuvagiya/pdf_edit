@@ -5,26 +5,24 @@
 ///  AND MAY NOT BE RESOLD OR REDISTRIBUTED. USAGE IS BOUND TO THE PSPDFKIT LICENSE AGREEMENT.
 ///  UNAUTHORIZED REPRODUCTION OR DISTRIBUTION IS SUBJECT TO CIVIL AND CRIMINAL PENALTIES.
 ///  This notice may not be removed from this file.
-
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pspdfkit_example/pspdfkit_save_as_example.dart';
-
 import 'package:pspdfkit_flutter/pspdfkit.dart';
-import 'package:pspdfkit_flutter/widgets/pspdfkit_widget_controller.dart';
 import 'package:pspdfkit_flutter/widgets/pspdfkit_widget.dart';
+import 'package:pspdfkit_flutter/widgets/pspdfkit_widget_controller.dart';
 
+import 'platform_utils.dart';
+import 'pspdfkit_annotation_processing_example.dart';
+import 'pspdfkit_annotations_example.dart';
 import 'pspdfkit_form_example.dart';
 import 'pspdfkit_instantjson_example.dart';
-import 'pspdfkit_annotations_example.dart';
 import 'pspdfkit_manual_save_example.dart';
 import 'pspdfkit_save_as_example.dart';
-import 'pspdfkit_annotation_processing_example.dart';
-import 'platform_utils.dart';
 
 const String _documentPath = 'PDFs/PSPDFKit.pdf';
 const String _lockedDocumentPath = 'PDFs/protected.pdf';
@@ -32,7 +30,6 @@ const String _imagePath = 'PDFs/PSPDFKit_Image_Example.jpg';
 const String _formPath = 'PDFs/Form_example.pdf';
 const String _instantDocumentJsonPath = 'PDFs/Instant/instant-document.json';
 const String _processedDocumentPath = 'PDFs/Embedded/PSPDFKit-processed.pdf';
-
 const String _pspdfkitFlutterPluginTitle =
     'PSPDFKit Flutter Plugin example app';
 
@@ -153,199 +150,260 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   void showDocument() async {
     final extractedDocument = await extractAsset(_documentPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => Scaffold(
-            extendBodyBehindAppBar: PlatformUtils.isAndroid(),
-            // Do not resize the the document view on Android or
-            // it won't be rendered correctly when filling forms.
-            resizeToAvoidBottomInset: PlatformUtils.isIOS(),
-            appBar: AppBar(),
-            body: SafeArea(
-                top: false,
-                bottom: false,
-                child: Container(
-                    padding: PlatformUtils.isCupertino(context)
-                        ? null
-                        : const EdgeInsets.only(top: kToolbarHeight),
-                    child: PspdfkitWidget(
-                        documentPath: extractedDocument.path))))));
+          extendBodyBehindAppBar: PlatformUtils.isAndroid(),
+          // Do not resize the the document view on Android or
+          // it won't be rendered correctly when filling forms.
+          resizeToAvoidBottomInset: PlatformUtils.isIOS(),
+          appBar: AppBar(),
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: Container(
+              padding: PlatformUtils.isCupertino(context)
+                  ? null
+                  : const EdgeInsets.only(top: kToolbarHeight),
+              child: PspdfkitWidget(
+                documentPath: extractedDocument.path,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void showDocumentPlatformStyle() async {
     final extractedDocument = await extractAsset(_documentPath);
 
     if (PlatformUtils.isCupertino(context)) {
-      await Navigator.of(context).push<dynamic>(CupertinoPageRoute<dynamic>(
+      await Navigator.of(context).push<dynamic>(
+        CupertinoPageRoute<dynamic>(
           builder: (_) => CupertinoPageScaffold(
-              navigationBar: const CupertinoNavigationBar(),
-              child: SafeArea(
-                  bottom: false,
-                  child:
-                      PspdfkitWidget(documentPath: extractedDocument.path)))));
+            navigationBar: const CupertinoNavigationBar(),
+            child: SafeArea(
+              bottom: false,
+              child: PspdfkitWidget(
+                documentPath: extractedDocument.path,
+              ),
+            ),
+          ),
+        ),
+      );
     } else {
-      await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+      await Navigator.of(context).push<dynamic>(
+        MaterialPageRoute<dynamic>(
           builder: (_) => Scaffold(
-              extendBodyBehindAppBar: true,
-              appBar: AppBar(),
-              body: SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: Container(
-                      padding: const EdgeInsets.only(top: kToolbarHeight),
-                      child: PspdfkitWidget(
-                          documentPath: extractedDocument.path))))));
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(),
+            body: SafeArea(
+              top: false,
+              bottom: false,
+              child: Container(
+                padding: const EdgeInsets.only(top: kToolbarHeight),
+                child: PspdfkitWidget(
+                  documentPath: extractedDocument.path,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
     }
   }
 
   void showImage() async {
     final extractedImage = await extractAsset(_imagePath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => Scaffold(
-            extendBodyBehindAppBar:
-                PlatformUtils.isCupertino(context) ? false : true,
-            appBar: AppBar(),
-            body: SafeArea(
-                top: false,
-                bottom: false,
-                child: Container(
-                    padding: PlatformUtils.isCupertino(context)
-                        ? null
-                        : const EdgeInsets.only(top: kToolbarHeight),
-                    child:
-                        PspdfkitWidget(documentPath: extractedImage.path))))));
+          extendBodyBehindAppBar:
+              PlatformUtils.isCupertino(context) ? false : true,
+          appBar: AppBar(),
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: Container(
+              padding: PlatformUtils.isCupertino(context)
+                  ? null
+                  : const EdgeInsets.only(top: kToolbarHeight),
+              child: PspdfkitWidget(
+                documentPath: extractedImage.path,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void applyDarkTheme() async {
     final extractedDocument = await extractAsset(_documentPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => Scaffold(
-            extendBodyBehindAppBar:
-                PlatformUtils.isCupertino(context) ? false : true,
-            appBar: AppBar(),
-            body: SafeArea(
-                top: false,
-                bottom: false,
-                child: Container(
-                    padding: PlatformUtils.isCupertino(context)
-                        ? null
-                        : const EdgeInsets.only(top: kToolbarHeight),
-                    child: PspdfkitWidget(
-                        documentPath: extractedDocument.path,
-                        configuration: const {
-                          appearanceMode: 'night',
-                          androidDarkThemeResource:
-                              'PSPDFKit.Theme.Example.Dark'
-                        }))))));
+          extendBodyBehindAppBar:
+              PlatformUtils.isCupertino(context) ? false : true,
+          appBar: AppBar(),
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: Container(
+              padding: PlatformUtils.isCupertino(context)
+                  ? null
+                  : const EdgeInsets.only(top: kToolbarHeight),
+              child: PspdfkitWidget(
+                documentPath: extractedDocument.path,
+                configuration: const {
+                  appearanceMode: 'night',
+                  androidDarkThemeResource: 'PSPDFKit.Theme.Example.Dark',
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void applyCustomConfiguration() async {
     final extractedDocument = await extractAsset(_documentPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => Scaffold(
-            extendBodyBehindAppBar:
-                PlatformUtils.isCupertino(context) ? false : true,
-            appBar: AppBar(),
-            body: SafeArea(
-                top: false,
-                bottom: false,
-                child: Container(
-                    padding: PlatformUtils.isCupertino(context)
-                        ? null
-                        : const EdgeInsets.only(top: kToolbarHeight),
-                    child: PspdfkitWidget(
-                        documentPath: extractedDocument.path,
-                        configuration: const {
-                          scrollDirection: 'vertical',
-                          pageTransition: 'scrollContinuous',
-                          spreadFitting: 'fit',
-                          immersiveMode: false,
-                          userInterfaceViewMode: 'automaticBorderPages',
-                          androidShowSearchAction: true,
-                          inlineSearch: false,
-                          showThumbnailBar: 'floating',
-                          androidShowThumbnailGridAction: true,
-                          androidShowOutlineAction: true,
-                          androidShowAnnotationListAction: true,
-                          showPageLabels: true,
-                          documentLabelEnabled: false,
-                          invertColors: false,
-                          androidGrayScale: false,
-                          startPage: 2,
-                          enableAnnotationEditing: true,
-                          enableTextSelection: false,
-                          androidShowBookmarksAction: false,
-                          androidEnableDocumentEditor: false,
-                          androidShowShareAction: true,
-                          androidShowPrintAction: false,
-                          androidShowDocumentInfoView: true,
-                          appearanceMode: 'default',
-                          androidDefaultThemeResource: 'PSPDFKit.Theme.Example',
-                          iOSRightBarButtonItems: [
-                            'thumbnailsButtonItem',
-                            'activityButtonItem',
-                            'searchButtonItem',
-                            'annotationButtonItem'
-                          ],
-                          iOSLeftBarButtonItems: ['settingsButtonItem'],
-                          iOSAllowToolbarTitleChange: false,
-                          toolbarTitle: 'Custom Title',
-                          settingsMenuItems: [
-                            'pageTransition',
-                            'scrollDirection',
-                            'androidTheme',
-                            'iOSAppearance',
-                            'androidPageLayout',
-                            'iOSPageMode',
-                            'iOSSpreadFitting',
-                            'androidScreenAwake',
-                            'iOSBrightness'
-                          ],
-                          showActionNavigationButtons: false,
-                          pageMode: 'double',
-                          firstPageAlwaysSingle: true
-                        }))))));
+          extendBodyBehindAppBar:
+              PlatformUtils.isCupertino(context) ? false : true,
+          appBar: AppBar(),
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: Container(
+              padding: PlatformUtils.isCupertino(context)
+                  ? null
+                  : const EdgeInsets.only(top: kToolbarHeight),
+              child: PspdfkitWidget(
+                documentPath: extractedDocument.path,
+                configuration: const {
+                  scrollDirection: 'vertical',
+                  pageTransition: 'scrollContinuous',
+                  spreadFitting: 'fit',
+                  immersiveMode: false,
+                  userInterfaceViewMode: 'automaticBorderPages',
+                  androidShowSearchAction: true,
+                  inlineSearch: false,
+                  showThumbnailBar: 'floating',
+                  androidShowThumbnailGridAction: true,
+                  androidShowOutlineAction: true,
+                  androidShowAnnotationListAction: true,
+                  showPageLabels: true,
+                  documentLabelEnabled: false,
+                  invertColors: false,
+                  androidGrayScale: false,
+                  startPage: 2,
+                  enableAnnotationEditing: true,
+                  enableTextSelection: false,
+                  androidShowBookmarksAction: false,
+                  androidEnableDocumentEditor: false,
+                  androidShowShareAction: true,
+                  androidShowPrintAction: false,
+                  androidShowDocumentInfoView: true,
+                  appearanceMode: 'default',
+                  androidDefaultThemeResource: 'PSPDFKit.Theme.Example',
+                  iOSRightBarButtonItems: [
+                    'thumbnailsButtonItem',
+                    'activityButtonItem',
+                    'searchButtonItem',
+                    'annotationButtonItem'
+                  ],
+                  iOSLeftBarButtonItems: ['settingsButtonItem'],
+                  iOSAllowToolbarTitleChange: false,
+                  toolbarTitle: 'Custom Title',
+                  settingsMenuItems: [
+                    'pageTransition',
+                    'scrollDirection',
+                    'androidTheme',
+                    'iOSAppearance',
+                    'androidPageLayout',
+                    'iOSPageMode',
+                    'iOSSpreadFitting',
+                    'androidScreenAwake',
+                    'iOSBrightness'
+                  ],
+                  showActionNavigationButtons: false,
+                  pageMode: 'double',
+                  firstPageAlwaysSingle: true,
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void unlockPasswordProtectedDocument() async {
     final extractedLockedDocument = await extractAsset(_lockedDocumentPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => Scaffold(
-            extendBodyBehindAppBar:
-                PlatformUtils.isCupertino(context) ? false : true,
-            appBar: AppBar(),
-            body: SafeArea(
-                top: false,
-                bottom: false,
-                child: Container(
-                    padding: PlatformUtils.isCupertino(context)
-                        ? null
-                        : const EdgeInsets.only(top: kToolbarHeight),
-                    child: PspdfkitWidget(
-                        documentPath: extractedLockedDocument.path,
-                        configuration: const {password: 'test123'}))))));
+          extendBodyBehindAppBar:
+              PlatformUtils.isCupertino(context) ? false : true,
+          appBar: AppBar(),
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: Container(
+              padding: PlatformUtils.isCupertino(context)
+                  ? null
+                  : const EdgeInsets.only(top: kToolbarHeight),
+              child: PspdfkitWidget(
+                documentPath: extractedLockedDocument.path,
+                configuration: const {
+                  password: 'test123',
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void showFormDocumentExample() async {
     final extractedFormDocument = await extractAsset(_formPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => PspdfkitFormExampleWidget(
-            documentPath: extractedFormDocument.path,
-            onPspdfkitFormExampleWidgetCreated: onWidgetCreated)));
+          documentPath: extractedFormDocument.path,
+          onPspdfkitFormExampleWidgetCreated: onWidgetCreated,
+        ),
+      ),
+    );
   }
 
   void importInstantJsonExample() async {
     final extractedFormDocument = await extractAsset(_documentPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => PspdfkitInstantJsonExampleWidget(
-            documentPath: extractedFormDocument.path,
-            instantJsonPath: _instantDocumentJsonPath)));
+          documentPath: extractedFormDocument.path,
+          instantJsonPath: _instantDocumentJsonPath,
+        ),
+      ),
+    );
   }
 
   void annotationsExample() async {
     final extractedDocument = await extractAsset(_documentPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => PspdfkitAnnotationsExampleWidget(
-            documentPath: extractedDocument.path)));
+          documentPath: extractedDocument.path,
+        ),
+      ),
+    );
   }
 
   void manualSaveExample() async {
@@ -354,10 +412,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     // Automatic Saving of documents is enabled by default in certain scenarios [see for details: https://pspdfkit.com/guides/flutter/save-a-document/#auto-save]
     // In order to manually save documents, you might consider disabling automatic saving with disableAutosave: true in the config
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => PspdfkitManualSaveExampleWidget(
-            documentPath: extractedWritableDocument.path,
-            configuration: const {disableAutosave: true})));
+          documentPath: extractedWritableDocument.path,
+          configuration: const {
+            disableAutosave: true,
+          },
+        ),
+      ),
+    );
   }
 
   void saveAsExample() async {
@@ -366,18 +430,28 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     // Automatic Saving of documents is enabled by default in certain scenarios [see for details: https://pspdfkit.com/guides/flutter/save-a-document/#auto-save]
     // In order to manually save documents, you might consider disabling automatic saving with disableAutosave: true in the config
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => PspdfkitSaveAsExampleWidget(
-            documentPath: extractedWritableDocument.path,
-            configuration: const {disableAutosave: true})));
+          documentPath: extractedWritableDocument.path,
+          configuration: const {
+            disableAutosave: true,
+          },
+        ),
+      ),
+    );
   }
 
   void annotationProcessingExample() async {
     final extractedDocument = await extractAsset(_documentPath);
-    await Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
         builder: (_) => PspdfkitAnnotationProcessingExampleWidget(
-            documentPath: extractedDocument.path,
-            exportPath: _processedDocumentPath)));
+          documentPath: extractedDocument.path,
+          exportPath: _processedDocumentPath,
+        ),
+      ),
+    );
   }
 
   void pushTwoPspdfWidgetsSimultaneously() async {
@@ -386,20 +460,29 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       final extractedFormDocument = await extractAsset(_formPath);
 
       if (PlatformUtils.isCupertino(context)) {
-        await Navigator.of(context).push<dynamic>(CupertinoPageRoute<dynamic>(
+        await Navigator.of(context).push<dynamic>(
+          CupertinoPageRoute<dynamic>(
             builder: (_) => CupertinoPageScaffold(
-                navigationBar: const CupertinoNavigationBar(),
-                child: SafeArea(
-                    bottom: false,
-                    child: Column(children: <Widget>[
-                      Expanded(
-                          child: PspdfkitWidget(
-                              documentPath: extractedDocument.path)),
-                      Expanded(
-                          child: PspdfkitWidget(
-                              documentPath: extractedFormDocument.path,
-                              onPspdfkitWidgetCreated: onWidgetCreated))
-                    ])))));
+              navigationBar: const CupertinoNavigationBar(),
+              child: SafeArea(
+                bottom: false,
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                        child: PspdfkitWidget(
+                            documentPath: extractedDocument.path)),
+                    Expanded(
+                      child: PspdfkitWidget(
+                        documentPath: extractedFormDocument.path,
+                        onPspdfkitWidgetCreated: onWidgetCreated,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
       } else {
         // This example is only supported in iOS at the moment.
         // Support for Android is coming soon.
@@ -643,11 +726,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final listTiles = <Widget>[
       Container(
-          color: Colors.grey[200],
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-          child: Text(_pspdfkitWidgetExamples,
-              style: currentTheme.textTheme.headline4?.copyWith(
-                  fontSize: _fontSize, fontWeight: FontWeight.bold))),
+        color: Colors.grey[200],
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        child: Text(
+          _pspdfkitWidgetExamples,
+          style: currentTheme.textTheme.headline4?.copyWith(
+            fontSize: _fontSize,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       ListTile(
           title: const Text(_basicExample),
           subtitle: const Text(_basicExampleSub),
@@ -726,25 +814,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           subtitle: const Text(_customConfigurationGlobalSub),
           onTap: () => applyCustomConfigurationGlobal()),
       ListTile(
-          title: const Text(_darkThemeGlobal),
-          subtitle: const Text(_darkThemeGlobalSub),
-          onTap: () => applyDarkThemeGlobal()),
+        title: const Text(_darkThemeGlobal),
+        subtitle: const Text(_darkThemeGlobalSub),
+        onTap: () => applyDarkThemeGlobal(),
+      ),
       ListTile(
-          title: const Text(_passwordProtectedDocumentGlobal),
-          subtitle: const Text(_passwordProtectedDocumentGlobalSub),
-          onTap: () => unlockPasswordProtectedDocumentGlobal()),
+        title: const Text(_passwordProtectedDocumentGlobal),
+        subtitle: const Text(_passwordProtectedDocumentGlobalSub),
+        onTap: () => unlockPasswordProtectedDocumentGlobal(),
+      ),
       ListTile(
-          title: const Text(_formExampleGlobal),
-          subtitle: const Text(_formExampleGlobalSub),
-          onTap: () => showFormDocumentExampleGlobal()),
+        title: const Text(_formExampleGlobal),
+        subtitle: const Text(_formExampleGlobalSub),
+        onTap: () => showFormDocumentExampleGlobal(),
+      ),
       ListTile(
-          title: const Text(_importInstantJsonExampleGlobal),
-          subtitle: const Text(_importInstantJsonExampleGlobalSub),
-          onTap: () => importInstantJsonExampleGlobal()),
+        title: const Text(_importInstantJsonExampleGlobal),
+        subtitle: const Text(_importInstantJsonExampleGlobalSub),
+        onTap: () => importInstantJsonExampleGlobal(),
+      ),
     ];
     return Scaffold(
-        appBar: AppBar(title: const Text(_pspdfkitFlutterPluginTitle)),
-        body: ExampleListView(currentTheme, frameworkVersion(), listTiles));
+      appBar: AppBar(title: const Text(_pspdfkitFlutterPluginTitle)),
+      body: ExampleListView(currentTheme, frameworkVersion(), listTiles),
+    );
   }
 }
 
@@ -759,21 +852,31 @@ class ExampleListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.max, children: [
-      Container(
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
           color: Colors.transparent,
           padding: const EdgeInsets.only(top: 24),
           child: Center(
-              child: Text(frameworkVersion,
-                  style: themeData.textTheme.headline4?.copyWith(
-                      fontSize: _fontSize,
-                      fontWeight: FontWeight.bold,
-                      color: themeData.primaryColor)))),
-      Expanded(
+            child: Text(
+              frameworkVersion,
+              style: themeData.textTheme.headline4?.copyWith(
+                fontSize: _fontSize,
+                fontWeight: FontWeight.bold,
+                color: themeData.primaryColor,
+              ),
+            ),
+          ),
+        ),
+        Expanded(
           child: ListView.separated(
-              itemCount: widgets.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
-              itemBuilder: (BuildContext context, int index) => widgets[index]))
-    ]);
+            itemCount: widgets.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (BuildContext context, int index) => widgets[index],
+          ),
+        ),
+      ],
+    );
   }
 }
